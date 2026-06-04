@@ -1,6 +1,6 @@
-import { ShoppingCart, Truck, Heart, Wrench, ShieldCheck, MapPin, Snowflake, ClipboardList, CalendarDays, type LucideIcon } from "lucide-react";
+import { ShoppingCart, Truck, Heart, Wrench, ShieldCheck, MapPin, Snowflake, ClipboardList, CalendarDays, Thermometer, type LucideIcon } from "lucide-react";
 
-export type AppId = "procure" | "fleet" | "operator" | "maintenance" | "safety" | "pemex" | "temperature"  | "CDMV"  | "Gantt" ;
+export type AppId = "procure" | "fleet" | "operator" | "maintenance" | "safety" | "pemex" | "temperature" | "CDMV" | "Gantt" | "termos";
 
 export type AppMeta = {
   id: AppId;
@@ -100,12 +100,23 @@ export const apps: AppMeta[] = [
   },
   {
     id: "temperature",
-    name: "Monitor de Temperaturas — Cajas Refrigeradas",
+    name: "Monitor de Temperatura",
     shortName: "Temperatura",
+    category: "CADENA DE FRÍO",
+    Icon: Thermometer,
+    description:
+      "Monitoreo en tiempo real de la temperatura de la cadena de frío, alertas de sensores, bitácoras de temperatura y estatus operativo.",
+    url: "https://monitor-temperatura.royal-transports.com",
+    embedRisk: true,
+  },
+  {
+    id: "termos",
+    name: "Termos — Cajas Refrigeradas",
+    shortName: "Termos",
     category: "CADENA DE FRÍO",
     Icon: Snowflake,
     description:
-      "Monitoreo en tiempo real de temperaturas de cajas refrigeradas. Alertas por desviaciones, históricos por unidad y reportes de cumplimiento para cargas sensibles.",
+      "Monitoreo de temperaturas de cajas refrigeradas (Termos). Alertas por desviaciones, históricos por unidad y reportes de cumplimiento.",
     url: "https://cajas-refrigeradas.royal-transports.com",
     embedRisk: true,
   }

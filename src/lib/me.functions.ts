@@ -60,7 +60,7 @@ export const getMe = createServerFn({ method: "GET" })
         roles: roleList,
         isAdmin,
         apps: (isAdmin
-          ? ["procure", "fleet", "operator", "maintenance", "safety", "pemex", "CDMV", "Gantt", "temperature"]
+          ? ["procure", "fleet", "operator", "maintenance", "safety", "pemex", "CDMV", "Gantt", "temperature", "termos"]
           : appAccessList) as string[],
       };
     } catch (error: any) {

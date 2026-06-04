@@ -5,7 +5,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { getDbConnection } from "./db";
 import crypto from "crypto";
 
-const APP_IDS = ["procure", "fleet", "operator", "maintenance", "safety", "pemex", "CDMV", "Gantt", "temperature"] as const;
+const APP_IDS = ["procure", "fleet", "operator", "maintenance", "safety", "pemex", "CDMV", "Gantt", "temperature", "termos"] as const;
 const HubAppEnum = z.enum(APP_IDS);
 
 async function assertAdmin(userId: string) {

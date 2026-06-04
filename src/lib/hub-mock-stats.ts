@@ -88,6 +88,14 @@ export async function getHubStats(): Promise<HubStats> {
       temperature: {
         live: false,
         metrics: [
+          { label: "Sensores activos", value: String(jitter(120, 10)), trend: trend(118) },
+          { label: "Alertas rango", value: String(jitter(1, 1)), trend: trend(1) },
+          { label: "Temp promedio", value: `${jitter(-5, 2)}°C`, trend: trend(-5) },
+        ],
+      },
+      termos: {
+        live: false,
+        metrics: [
           { label: "Cajas activas", value: String(jitter(94, 6)), trend: trend(92) },
           { label: "Alertas frío", value: String(jitter(2, 2)), trend: trend(2) },
           { label: "Temp prom. °C", value: String(jitter(-18, 3)), trend: trend(-18) },
