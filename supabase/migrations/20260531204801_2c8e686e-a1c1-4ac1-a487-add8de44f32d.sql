@@ -1,0 +1,1 @@
+ALTER TYPE public.hub_app ADD VALUE 'temperature';
