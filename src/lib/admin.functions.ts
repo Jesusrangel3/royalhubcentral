@@ -3,7 +3,6 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { getDbConnection } from "./db";
-import mssql from "mssql";
 import crypto from "crypto";
 
 const APP_IDS = ["procure", "fleet", "operator", "maintenance", "safety", "pemex", "CDMV", "Gantt", "temperature"] as const;
@@ -14,6 +13,7 @@ async function assertAdmin(userId: string) {
   if (userId === "mock-admin-id" || userId === "00000000-0000-0000-0000-000000000001" || userId === "00000000-0000-0000-0000-000000000002") return;
 
   try {
+    const mssql = await import("mssql");
     const db = await getDbConnection();
     
     // Obtener el email del usuario para validar si es un admin por defecto
@@ -97,6 +97,7 @@ export const createUserAdmin = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context.userId);
+    const mssql = await import("mssql");
     const db = await getDbConnection();
     const transaction = new mssql.Transaction(db);
     
@@ -165,6 +166,7 @@ export const updateUserAccessAdmin = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context.userId);
+    const mssql = await import("mssql");
     const db = await getDbConnection();
     const transaction = new mssql.Transaction(db);
     
@@ -218,6 +220,7 @@ export const deleteUserAdmin = createServerFn({ method: "POST" })
     if (data.userId === context.userId) throw new Error("Cannot delete yourself");
     
     try {
+      const mssql = await import("mssql");
       const db = await getDbConnection();
       
       // Borrar de 'users', cascada borrará perfil, roles y accesos
@@ -246,6 +249,7 @@ export const resetPasswordAdmin = createServerFn({ method: "POST" })
     await assertAdmin(context.userId);
     
     try {
+      const mssql = await import("mssql");
       const db = await getDbConnection();
       const passwordHash = await bcrypt.hash(data.password, 10);
 

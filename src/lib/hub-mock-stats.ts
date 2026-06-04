@@ -93,6 +93,22 @@ export async function getHubStats(): Promise<HubStats> {
           { label: "Temp prom. °C", value: String(jitter(-18, 3)), trend: trend(-18) },
         ],
       },
+      CDMV: {
+        live: false,
+        metrics: [
+          { label: "Órdenes activas", value: String(jitter(15, 3)), trend: trend(14) },
+          { label: "Preventivos hoy", value: String(jitter(4, 2)), trend: trend(3) },
+          { label: "En taller", value: String(jitter(8, 2)), trend: trend(7) },
+        ],
+      },
+      Gantt: {
+        live: false,
+        metrics: [
+          { label: "Proyectos", value: String(jitter(6, 1)), trend: trend(5) },
+          { label: "Tareas atrasadas", value: String(jitter(2, 1)), trend: trend(2) },
+          { label: "Hitos completados", value: `${jitter(88, 5)}%`, trend: trend(85) },
+        ],
+      },
     },
     activity: [
       { id: "1", time: "hace 2 min", app: "pemex", text: "Embarque PMX-4421 inició descarga en Salina Cruz" },

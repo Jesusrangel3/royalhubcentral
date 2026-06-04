@@ -1,6 +1,6 @@
-import { ShoppingCart, Truck, Heart, Wrench, ShieldCheck, MapPin, Thermometer, type LucideIcon } from "lucide-react";
+import { ShoppingCart, Truck, Heart, Wrench, ShieldCheck, MapPin, Snowflake, ClipboardList, CalendarDays, type LucideIcon } from "lucide-react";
 
-export type AppId = "procure" | "fleet" | "operator" | "maintenance" | "safety" | "pemex" | "temperature"  | "CDMV"  | ""  | "Gantt" ;
+export type AppId = "procure" | "fleet" | "operator" | "maintenance" | "safety" | "pemex" | "temperature"  | "CDMV"  | "Gantt" ;
 
 export type AppMeta = {
   id: AppId;
@@ -77,22 +77,11 @@ export const apps: AppMeta[] = [
     url: "https://tablerovjs.lovable.app",
   },
   {
-    id: "temperature",
-    name: "Monitor de Temperaturas — Cajas Refrigeradas",
-    shortName: "Temperatura",
-    category: "CADENA DE FRÍO",
-    Icon: Thermometer,
-    description:
-      "Monitoreo en tiempo real de temperaturas de cajas refrigeradas. Alertas por desviaciones, históricos por unidad y reportes de cumplimiento para cargas sensibles.",
-    url: "https://monitor-temperatura.royal-transports.com",
-    embedRisk: true,
-  },
-  {
     id: "CDMV",
     name: "Control Digital de Mantenimiento Vehicular",
     shortName: "CDMV",
     category: "MANTENIMIENTO",
-    Icon: Thermometer,
+    Icon: ClipboardList,
     description:
       "Sistema de control digital para mantenimiento vehicular",
     url: "https://c-d-m-v.lovable.app",
@@ -103,10 +92,21 @@ export const apps: AppMeta[] = [
     name: "Planificación Gantt",
     shortName: "Gantt",
     category: "PROYECTOS",
-    Icon: MapPin,
+    Icon: CalendarDays,
     description:
       "Sistema de planificación Gantt para gestión de proyectos. Visualización de tareas, dependencias y cronogramas",
-    url: "https://gantt.lovable.app",
+    url: "https://royal-gantt-planner.vercel.app",
+    embedRisk: true,
+  },
+  {
+    id: "temperature",
+    name: "Monitor de Temperaturas — Cajas Refrigeradas",
+    shortName: "Temperatura",
+    category: "CADENA DE FRÍO",
+    Icon: Snowflake,
+    description:
+      "Monitoreo en tiempo real de temperaturas de cajas refrigeradas. Alertas por desviaciones, históricos por unidad y reportes de cumplimiento para cargas sensibles.",
+    url: "https://cajas-refrigeradas.royal-transports.com",
     embedRisk: true,
   }
 ];

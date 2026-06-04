@@ -3,7 +3,6 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { getDbConnection } from "./db";
-import mssql from "mssql";
 
 export const loginServerFn = createServerFn({ method: "POST" })
   .inputValidator((d) =>
@@ -15,6 +14,7 @@ export const loginServerFn = createServerFn({ method: "POST" })
       .parse(d),
   )
   .handler(async ({ data }) => {
+    const mssql = await import("mssql");
     try {
       let user = null;
       let fullName = "";
