@@ -15,4 +15,7 @@ export default defineConfig({
   nitro: {
     preset: "vercel",
   },
+  ssr: {
+    noExternal: ['@supabase/supabase-js', '@supabase/auth-js', 'tslib'],
+  },
 });
