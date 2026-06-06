@@ -7,6 +7,17 @@ type Props = {
   reloadKey: number;
 };
 
+/** Lee las credenciales de sesión del localStorage y las devuelve si existen */
+function getStoredCredentials(): { email: string; password: string } | null {
+  try {
+    const raw = localStorage.getItem("royal_hub_creds");
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
 export function EmbeddedApp({ app, reloadKey }: Props) {
   const [loaded, setLoaded] = useState(false);
   const [blocked, setBlocked] = useState(false);
@@ -16,6 +27,30 @@ export function EmbeddedApp({ app, reloadKey }: Props) {
     setLoaded(false);
     setBlocked(false);
   }, [app.id, reloadKey]);
+
+  /** Cuando el iframe termina de cargar, enviamos las credenciales via postMessage
+   *  para que el sub-sistema pueda hacer el login automático (SSO) */
+  function handleIframeLoad() {
+    setLoaded(true);
+    const creds = getStoredCredentials();
+    if (creds && iframeRef.current?.contentWindow) {
+      // Esperamos 800ms para que el sub-sistema inicialice su app antes de enviar el mensaje
+      setTimeout(() => {
+        try {
+          iframeRef.current?.contentWindow?.postMessage(
+            {
+              type: "ROYAL_HUB_SSO",
+              email: creds.email,
+              password: creds.password,
+            },
+            "*"
+          );
+        } catch {
+          // Si falla el postMessage (cross-origin bloqueado), lo ignoramos silenciosamente
+        }
+      }, 800);
+    }
+  }
 
   if (blocked) {
     const Icon = app.Icon;
@@ -80,7 +115,7 @@ export function EmbeddedApp({ app, reloadKey }: Props) {
         referrerPolicy="no-referrer-when-downgrade"
         allow="clipboard-read; clipboard-write; fullscreen; camera; microphone; geolocation"
         sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-downloads allow-modals allow-popups-to-escape-sandbox"
-        onLoad={() => setLoaded(true)}
+        onLoad={handleIframeLoad}
       />
     </div>
   );

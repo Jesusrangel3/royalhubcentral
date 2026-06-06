@@ -43,13 +43,14 @@ export const getMe = createServerFn({ method: "GET" })
       } catch (dbErr: any) {
         console.warn("⚠️ No se pudo conectar a SQL Server en getMe. Usando perfil de demostración...", dbErr.message);
         // Fallback de demo si la BD está caída o en la nube sin configurar
-        if (userId === "00000000-0000-0000-0000-000000000001" || userId === "00000000-0000-0000-0000-000000000002") {
-          const isSdazul = userId === "00000000-0000-0000-0000-000000000001";
-          profile = {
-            id: userId,
-            email: isSdazul ? "sdazul@gmail.com" : "mario.alcocer1997@gmail.com",
-            full_name: isSdazul ? "Omar Carrillo (Demo)" : "Mario Alcocer (Demo)",
-          };
+        const demoProfiles: Record<string, { id: string; email: string; full_name: string }> = {
+          "00000000-0000-0000-0000-000000000001": { id: "00000000-0000-0000-0000-000000000001", email: "sdazul@gmail.com", full_name: "Omar Carrillo (Demo)" },
+          "00000000-0000-0000-0000-000000000002": { id: "00000000-0000-0000-0000-000000000002", email: "mario.alcocer1997@gmail.com", full_name: "Mario Alcocer (Demo)" },
+          "00000000-0000-0000-0000-000000000003": { id: "00000000-0000-0000-0000-000000000003", email: "jesus@royaltransports.com.mx", full_name: "Jesús Sánchez" },
+        };
+        const demoProfile = demoProfiles[userId];
+        if (demoProfile) {
+          profile = demoProfile;
           roleList = ["admin"];
           isAdmin = true;
         }

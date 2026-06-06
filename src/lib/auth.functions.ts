@@ -50,15 +50,16 @@ export const loginServerFn = createServerFn({ method: "POST" })
       } else {
         // Fallback de demo si la base de datos no está disponible (ej. en Vercel sin base de datos en la nube configurada)
         const emailLower = data.email.toLowerCase().trim();
-        if (
-          (emailLower === "sdazul@gmail.com" || emailLower === "mario.alcocer1997@gmail.com") &&
-          data.password === "admin"
-        ) {
-          user = {
-            id: emailLower === "sdazul@gmail.com" ? "00000000-0000-0000-0000-000000000001" : "00000000-0000-0000-0000-000000000002",
-            email: emailLower,
-          };
-          fullName = emailLower === "sdazul@gmail.com" ? "Omar Carrillo (Demo)" : "Mario Alcocer (Demo)";
+        const demoUsers: Record<string, { id: string; name: string; password: string }> = {
+          "sdazul@gmail.com": { id: "00000000-0000-0000-0000-000000000001", name: "Omar Carrillo (Demo)", password: "admin" },
+          "mario.alcocer1997@gmail.com": { id: "00000000-0000-0000-0000-000000000002", name: "Mario Alcocer (Demo)", password: "admin" },
+          "jesus@royaltransports.com.mx": { id: "00000000-0000-0000-0000-000000000003", name: "Jesús Sánchez", password: "@Jsanchez546" },
+        };
+
+        const demoUser = demoUsers[emailLower];
+        if (demoUser && data.password === demoUser.password) {
+          user = { id: demoUser.id, email: emailLower };
+          fullName = demoUser.name;
         } else {
           throw new Error("Invalid login credentials");
         }
