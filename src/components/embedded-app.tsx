@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { ExternalLink, RefreshCw, ShieldAlert } from "lucide-react";
+import { ExternalLink, RefreshCw, ShieldAlert, LogIn } from "lucide-react";
 import type { AppMeta } from "@/lib/apps";
 
 type Props = {
   app: AppMeta;
   reloadKey: number;
 };
+
+/** IDs de apps que tienen SSO via postMessage implementado */
+const SSO_ENABLED_APPS = new Set(["Gantt"]);
 
 /** Lee las credenciales de sesión del localStorage y las devuelve si existen */
 function getStoredCredentials(): { email: string; password: string } | null {
@@ -29,9 +32,13 @@ export function EmbeddedApp({ app, reloadKey }: Props) {
   }, [app.id, reloadKey]);
 
   /** Cuando el iframe termina de cargar, enviamos las credenciales via postMessage
-   *  para que el sub-sistema pueda hacer el login automático (SSO) */
+   *  para sub-sistemas que tienen SSO implementado (ej. Gantt) */
   function handleIframeLoad() {
     setLoaded(true);
+
+    // Solo enviar postMessage a apps que tienen el listener SSO implementado
+    if (!SSO_ENABLED_APPS.has(app.id)) return;
+
     const creds = getStoredCredentials();
     if (!creds) return;
 
@@ -53,12 +60,10 @@ export function EmbeddedApp({ app, reloadKey }: Props) {
     }
 
     // Primer intento: 1.5s después de que el iframe reporta onLoad
-    // (el framework del sub-sistema puede tardar en montar sus componentes)
     setTimeout(sendSSO, 1500);
     // Segundo intento: 4s — por si la app tarda más en inicializar
     setTimeout(sendSSO, 4000);
   }
-
 
   if (blocked) {
     const Icon = app.Icon;
