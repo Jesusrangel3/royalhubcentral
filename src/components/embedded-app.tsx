@@ -33,24 +33,32 @@ export function EmbeddedApp({ app, reloadKey }: Props) {
   function handleIframeLoad() {
     setLoaded(true);
     const creds = getStoredCredentials();
-    if (creds && iframeRef.current?.contentWindow) {
-      // Esperamos 800ms para que el sub-sistema inicialice su app antes de enviar el mensaje
-      setTimeout(() => {
-        try {
-          iframeRef.current?.contentWindow?.postMessage(
-            {
-              type: "ROYAL_HUB_SSO",
-              email: creds.email,
-              password: creds.password,
-            },
-            "*"
-          );
-        } catch {
-          // Si falla el postMessage (cross-origin bloqueado), lo ignoramos silenciosamente
-        }
-      }, 800);
+    if (!creds) return;
+
+    // Función helper para enviar el mensaje SSO
+    function sendSSO() {
+      try {
+        iframeRef.current?.contentWindow?.postMessage(
+          {
+            type: "ROYAL_HUB_SSO",
+            source: "royal-hub",
+            email: creds!.email,
+            password: creds!.password,
+          },
+          "*"
+        );
+      } catch {
+        // Si falla el postMessage (cross-origin bloqueado), lo ignoramos silenciosamente
+      }
     }
+
+    // Primer intento: 1.5s después de que el iframe reporta onLoad
+    // (el framework del sub-sistema puede tardar en montar sus componentes)
+    setTimeout(sendSSO, 1500);
+    // Segundo intento: 4s — por si la app tarda más en inicializar
+    setTimeout(sendSSO, 4000);
   }
+
 
   if (blocked) {
     const Icon = app.Icon;
